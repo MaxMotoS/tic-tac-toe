@@ -19,8 +19,8 @@ public class Field {
 
     private char[] fillLine(char value) {
         char[] line = new char[WIDTH];
-        for (char cell : line) {
-            cell = value;
+        for (int j = 0; j < WIDTH; j++) {
+            line[j] = value;
         }
         return line;
     }
@@ -101,10 +101,14 @@ public class Field {
         System.out.println();
     }
 
-    public void setCell(char value, int position) {
+    public void setCell(char value, int position) throws Exception {
         int line = position / HEIGHT;
         int colum = position % HEIGHT;
 
-        field[line][colum] = value;
+        if (field[line][colum] == EMPTY_CELL) {
+            field[line][colum] = value;
+        } else {
+            throw new Exception("");
+        }
     }
 }

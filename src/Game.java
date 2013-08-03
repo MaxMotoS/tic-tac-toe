@@ -15,7 +15,7 @@ public class Game {
         field = new Field();
     }
 
-    public void run() throws IOException {
+    public void run() {
         if (player1 != null && player2 != null) {
             current = player1;
             while (true) {
@@ -27,11 +27,16 @@ public class Game {
         }
     }
 
-    private void step () throws IOException {
+    private void step () {
         field.showField();
         System.out.println("Current player " + current.getName());
         int position = readStep();
-        field.setCell(current.getFigure(), position);
+        try {
+            field.setCell(current.getFigure(), position);
+        } catch (Exception e) {
+            System.out.println("This cell isn't empty. Try again...");
+            return;
+        }
         if (current.equals(player1)) {
             current = player2;
         } else {
@@ -39,14 +44,19 @@ public class Game {
         }
     }
 
-    private int readStep() throws IOException {
+    private int readStep() {
         DataInputStream in = new DataInputStream(System.in);
-        int line;
-        int colum;
+        int line = 0;
+        int colum = 0;
 
         while(true) {
             System.out.print("Enter line: ");
-            line = Integer.parseInt(new DataInputStream(System.in).readLine());
+            try {
+                line = Integer.parseInt(new DataInputStream(System.in).readLine());
+            } catch (Exception e) {
+                System.out.println("You enter not valid colum. Try again...");
+                continue;
+            }
             if (line > 0 && line <= Field.HEIGHT) {
                 break;
             } else {
@@ -55,7 +65,12 @@ public class Game {
         }
         while (true) {
             System.out.print("Enter colum: ");
-            colum = Integer.parseInt(new DataInputStream(System.in).readLine());
+            try {
+                colum = Integer.parseInt(new DataInputStream(System.in).readLine());
+            } catch (Exception e) {
+                System.out.println("You enter not valid colum. Try again...");
+                continue;
+            }
             if (colum > 0 && colum <= Field.HEIGHT) {
                 break;
             } else {
